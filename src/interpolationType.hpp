@@ -6,8 +6,8 @@
 enum class InterpolationType
 {
 	euler,
-	quaternionLinear,
-	quaternionSlerp
+	quatLinear,
+	quatSlerp
 };
 
 inline const std::array<std::string, 3> interpolationTypeLabels

@@ -11,10 +11,10 @@ Scene::Scene(const glm::ivec2& viewportSize) :
 	m_viewportSize{viewportSize},
 	m_camera{fovYDeg, nearPlane, farPlane},
 	m_eulerFrames(m_intermediateFrameCount),
-	m_quaternionLinearFrames(m_intermediateFrameCount),
-	m_quaternionSlerpFrames(m_intermediateFrameCount),
-	m_interpolation{m_eulerFrame, m_eulerFrames, m_quaternionLinearFrame, m_quaternionLinearFrames,
-		m_quaternionSlerpFrame, m_quaternionSlerpFrames}
+	m_quatLinearFrames(m_intermediateFrameCount),
+	m_quatSlerpFrames(m_intermediateFrameCount),
+	m_interpolation{m_eulerFrame, m_eulerFrames, m_quatLinearFrame, m_quatLinearFrames,
+		m_quatSlerpFrame, m_quatSlerpFrames}
 {
 	updateViewportSize();
 
@@ -151,6 +151,31 @@ void Scene::setStartPos(const glm::vec3& pos)
 	m_interpolation.setStartPos(pos);
 }
 
+glm::vec3 Scene::getStartEulerAngles() const
+{
+	return m_interpolation.getStartEulerAngles();
+}
+
+void Scene::setStartEulerAngles(const glm::vec3& eulerAngles)
+{
+	m_interpolation.setStartEulerAngles(eulerAngles);
+}
+
+glm::vec4 Scene::getStartQuat() const
+{
+	return m_interpolation.getStartQuat();
+}
+
+void Scene::setStartQuat(const glm::vec4& quat)
+{
+	m_interpolation.setStartQuat(quat);
+}
+
+void Scene::normalizeStartQuat()
+{
+	m_interpolation.normalizeStartQuat();
+}
+
 glm::vec3 Scene::getEndPos() const
 {
 	return m_interpolation.getEndPos();
@@ -159,6 +184,31 @@ glm::vec3 Scene::getEndPos() const
 void Scene::setEndPos(const glm::vec3& pos)
 {
 	m_interpolation.setEndPos(pos);
+}
+
+glm::vec3 Scene::getEndEulerAngles() const
+{
+	return m_interpolation.getEndEulerAngles();
+}
+
+void Scene::setEndEulerAngles(const glm::vec3& eulerAngles)
+{
+	m_interpolation.setEndEulerAngles(eulerAngles);
+}
+
+glm::vec4 Scene::getEndQuat() const
+{
+	return m_interpolation.getEndQuat();
+}
+
+void Scene::setEndQuat(const glm::vec4& quat)
+{
+	m_interpolation.setEndQuat(quat);
+}
+
+void Scene::normalizeEndQuat()
+{
+	m_interpolation.normalizeEndQuat();
 }
 
 float Scene::getAnimationTime() const
@@ -180,8 +230,8 @@ void Scene::setIntermediateFrameCount(int count)
 {
 	m_intermediateFrameCount = count;
 	m_eulerFrames.resize(count);
-	m_quaternionLinearFrames.resize(count);
-	m_quaternionSlerpFrames.resize(count);
+	m_quatLinearFrames.resize(count);
+	m_quatSlerpFrames.resize(count);
 	m_interpolation.updateFrames();
 }
 
@@ -229,12 +279,12 @@ void Scene::renderFrames(InterpolationType type)
 			renderFrames(m_eulerFrame, m_eulerFrames);
 			break;
 
-		case InterpolationType::quaternionLinear:
-			renderFrames(m_quaternionLinearFrame, m_quaternionLinearFrames);
+		case InterpolationType::quatLinear:
+			renderFrames(m_quatLinearFrame, m_quatLinearFrames);
 			break;
 
-		case InterpolationType::quaternionSlerp:
-			renderFrames(m_quaternionSlerpFrame, m_quaternionSlerpFrames);
+		case InterpolationType::quatSlerp:
+			renderFrames(m_quatSlerpFrame, m_quatSlerpFrames);
 			break;
 	}
 }

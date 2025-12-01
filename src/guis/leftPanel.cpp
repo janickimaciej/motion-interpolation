@@ -39,12 +39,22 @@ void LeftPanel::update()
 	updatePosAndOrientation(
 		[this] () { return m_scene.getStartPos(); },
 		[this] (const glm::vec3& pos) { m_scene.setStartPos(pos); },
+		[this] () { return m_scene.getStartEulerAngles(); },
+		[this] (const glm::vec3& eulerAngles) { m_scene.setStartEulerAngles(eulerAngles); },
+		[this] () { return m_scene.getStartQuat(); },
+		[this] (const glm::vec4& quat) { m_scene.setStartQuat(quat); },
+		[this] () { m_scene.normalizeStartQuat(); },
 		"##start");
 
 	ImGui::SeparatorText("End");
 	updatePosAndOrientation(
 		[this] () { return m_scene.getEndPos(); },
 		[this] (const glm::vec3& pos) { m_scene.setEndPos(pos); },
+		[this] () { return m_scene.getEndEulerAngles(); },
+		[this] (const glm::vec3& eulerAngles) { m_scene.setEndEulerAngles(eulerAngles); },
+		[this] () { return m_scene.getEndQuat(); },
+		[this] (const glm::vec4& quat) { m_scene.setEndQuat(quat); },
+		[this] () { m_scene.normalizeEndQuat(); },
 		"##end");
 
 	ImGui::SeparatorText("Animation");
@@ -89,27 +99,78 @@ void LeftPanel::updateInterpolationType(const std::function<InterpolationType(vo
 }
 
 void LeftPanel::updatePosAndOrientation(const std::function<glm::vec3(void)>& posGetter,
-	const std::function<void(const glm::vec3&)>& posSetter, const std::string& suffix)
+	const std::function<void(const glm::vec3&)>& posSetter,
+	const std::function<glm::vec3(void)>& eulerAnglesGetter,
+	const std::function<void(const glm::vec3&)>& eulerAnglesSetter,
+	const std::function<glm::vec4(void)>& quatGetter,
+	const std::function<void(const glm::vec4&)>& quatSetter,
+	const std::function<void(void)>& normalizeQuat, const std::string& suffix)
 {
-	ImGui::PushItemWidth(68);
+	ImGui::PushItemWidth(69);
 
 	glm::vec3 pos = posGetter();
 	glm::vec3 prevPos = pos;
 
-	constexpr float speed = 0.01f;
+	constexpr float speedPos = 0.01f;
 	ImGui::Text("Position");
-	ImGui::DragFloat(("x" + suffix).c_str(), &pos.x, speed);
+	ImGui::DragFloat(("x" + suffix + "Pos").c_str(), &pos.x, speedPos);
 	ImGui::SameLine();
-	ImGui::DragFloat(("y" + suffix).c_str(), &pos.y, speed);
+	ImGui::DragFloat(("y" + suffix + "Pos").c_str(), &pos.y, speedPos);
 	ImGui::SameLine();
-	ImGui::DragFloat(("z" + suffix).c_str(), &pos.z, speed);
+	ImGui::DragFloat(("z" + suffix + "Pos").c_str(), &pos.z, speedPos);
 
 	if (pos != prevPos)
 	{
 		posSetter(pos);
 	}
 
+	glm::vec3 eulerAngles = glm::degrees(eulerAnglesGetter());
+	glm::vec3 prevEulerAngles = eulerAngles;
+
+	constexpr float speedEulerAngles = 0.2f;
+	ImGui::Text("Euler angles");
+	ImGui::DragFloat(("x" + suffix + "EulerAngles").c_str(), &eulerAngles.x, speedEulerAngles,
+		-180.0f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::SameLine();
+	ImGui::DragFloat(("y" + suffix + "EulerAngles").c_str(), &eulerAngles.y, speedEulerAngles,
+		-90.0f, 90.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+	ImGui::SameLine();
+	ImGui::DragFloat(("z" + suffix + "EulerAngles").c_str(), &eulerAngles.z, speedEulerAngles,
+		-180.0f, 180.f, "%.2f", ImGuiSliderFlags_AlwaysClamp);
+
+	if (eulerAngles != prevEulerAngles)
+	{
+		eulerAnglesSetter(glm::radians(eulerAngles));
+	}
+
 	ImGui::PopItemWidth();
+	ImGui::PushItemWidth(47);
+
+	glm::vec4 quat = quatGetter();
+	glm::vec4 prevQuat = quat;
+
+	constexpr float speedQuat = 0.01f;
+	ImGui::Text("Quaternion");
+	ImGui::DragFloat(("x" + suffix + "Quaternion").c_str(), &quat.x, speedQuat);
+	ImGui::SameLine();
+	ImGui::DragFloat(("y" + suffix + "Quaternion").c_str(), &quat.y, speedQuat);
+	ImGui::SameLine();
+	ImGui::DragFloat(("z" + suffix + "Quaternion").c_str(), &quat.z, speedQuat);
+	ImGui::SameLine();
+	ImGui::DragFloat(("w" + suffix + "Quaternion").c_str(), &quat.w, speedPos);
+
+	if (quat != prevQuat)
+	{
+		quatSetter(quat);
+	}
+
+	ImGui::PopItemWidth();
+	ImGui::Spacing();
+
+	if (ImGui::Button(("Normalize" + suffix + "Normalize").c_str()))
+	{
+		normalizeQuat();
+	}
 }
 
 void LeftPanel::updateAnimationTime()

@@ -2,6 +2,7 @@
 
 layout (points) in;
 
+uniform mat4 modelMatrix;
 uniform mat4 projectionViewMatrix;
 
 layout (line_strip, max_vertices = 6) out;
@@ -29,7 +30,7 @@ void main()
 
 vec4 transformVec(vec4 axisWorld)
 {
-	return projectionViewMatrix * axisWorld;
+	return projectionViewMatrix * modelMatrix * axisWorld;
 }
 
 void emitAxis(vec4 axisClip, vec3 axisColor)

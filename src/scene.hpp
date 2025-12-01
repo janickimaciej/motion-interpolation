@@ -40,8 +40,20 @@ public:
 
 	glm::vec3 getStartPos() const;
 	void setStartPos(const glm::vec3& pos);
+	glm::vec3 getStartEulerAngles() const;
+	void setStartEulerAngles(const glm::vec3& eulerAngles);
+	glm::vec4 getStartQuat() const;
+	void setStartQuat(const glm::vec4& quat);
+	void normalizeStartQuat();
+
 	glm::vec3 getEndPos() const;
 	void setEndPos(const glm::vec3& pos);
+	glm::vec3 getEndEulerAngles() const;
+	void setEndEulerAngles(const glm::vec3& eulerAngles);
+	glm::vec4 getEndQuat() const;
+	void setEndQuat(const glm::vec4& quat);
+	void normalizeEndQuat();
+
 	float getAnimationTime() const;
 	void setAnimationTime(float time);
 	int getIntermediateFrameCount() const;
@@ -61,18 +73,18 @@ private:
 	static constexpr float gridScale = 5.0f;
 	Plane m_plane{gridScale};
 
-	int m_intermediateFrameCount = 5;
+	int m_intermediateFrameCount = 30;
 
 	Frame m_eulerFrame{false};
 	std::vector<Frame> m_eulerFrames;
-	Frame m_quaternionLinearFrame{false};
-	std::vector<Frame> m_quaternionLinearFrames;
-	Frame m_quaternionSlerpFrame{false};
-	std::vector<Frame> m_quaternionSlerpFrames;
+	Frame m_quatLinearFrame{false};
+	std::vector<Frame> m_quatLinearFrames;
+	Frame m_quatSlerpFrame{false};
+	std::vector<Frame> m_quatSlerpFrames;
 
 	Interpolation m_interpolation;
 	InterpolationType m_interpolationTypeLeft = InterpolationType::euler;
-	InterpolationType m_interpolationTypeRight = InterpolationType::quaternionSlerp;
+	InterpolationType m_interpolationTypeRight = InterpolationType::quatSlerp;
 	bool m_renderIntermediateFrames = false;
 
 	void setUpFramebuffer() const;
