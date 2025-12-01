@@ -4,6 +4,8 @@
 
 #include <imgui/imgui.h>
 
+#include <algorithm>
+
 LeftPanel::LeftPanel(Scene& scene, const glm::ivec2& viewportSize) :
 	m_scene{scene},
 	m_viewportSize{viewportSize}
@@ -46,7 +48,13 @@ void LeftPanel::update()
 		"##end");
 
 	ImGui::SeparatorText("Animation");
+	updateAnimationTime();
+	ImGui::Spacing();
+	updateIntermediateFrames();
+	ImGui::Spacing();
 	updateButtons();
+	ImGui::Spacing();
+	updateTime();
 
 	ImGui::PopItemWidth();
 	ImGui::End();
@@ -104,6 +112,50 @@ void LeftPanel::updatePosAndOrientation(const std::function<glm::vec3(void)>& po
 	ImGui::PopItemWidth();
 }
 
+void LeftPanel::updateAnimationTime()
+{
+	float animationTime = m_scene.getAnimationTime();
+	float prevAnimationTime = animationTime;
+
+	constexpr float speed = 0.1f;
+	ImGui::Text("Time");
+	ImGui::DragFloat("##animationTime", &animationTime, speed, 0.01f, 3600.0f, "%.2f",
+		ImGuiSliderFlags_AlwaysClamp);
+
+	if (animationTime != prevAnimationTime)
+	{
+		m_scene.setAnimationTime(animationTime);
+	}
+}
+
+void LeftPanel::updateIntermediateFrames()
+{
+	int intermediateFrames = m_scene.getIntermediateFrameCount();
+	int prevIntermediateFrames = intermediateFrames;
+
+	constexpr float speed = 0.1f;
+	ImGui::Text("Intermediate frames");
+	ImGui::DragInt("##intermediateFrames", &intermediateFrames, speed, 2, 100, "%d",
+		ImGuiSliderFlags_AlwaysClamp);
+
+	if (intermediateFrames != prevIntermediateFrames)
+	{
+		m_scene.setIntermediateFrameCount(intermediateFrames);
+	}
+
+	ImGui::SameLine();
+
+	bool render = m_scene.getRenderIntermediateFrames();
+	bool prevRender = render;
+
+	ImGui::Checkbox("render", &render);
+
+	if (render != prevRender)
+	{
+		m_scene.setRenderIntermediateFrames(render);
+	}
+}
+
 void LeftPanel::updateButtons()
 {
 	if (ImGui::Button("Start"))
@@ -124,4 +176,9 @@ void LeftPanel::updateButtons()
 	{
 		m_scene.resetInterpolation();
 	}
+}
+
+void LeftPanel::updateTime()
+{
+	ImGui::Text("t = %.2f s", m_scene.getTime());
 }

@@ -2,7 +2,8 @@
 
 #include <glad/glad.h>
 
-FrameMesh::FrameMesh()
+FrameMesh::FrameMesh(bool intermediate) :
+	m_intermediate{intermediate}
 {
 	glGenVertexArrays(1, &m_VAO);
 }
@@ -15,7 +16,7 @@ FrameMesh::~FrameMesh()
 void FrameMesh::render() const
 {
 	glBindVertexArray(m_VAO);
-	glLineWidth(5);
+	glLineWidth(m_intermediate ? 1 : 5);
 	glDrawArrays(GL_POINTS, 0, 1);
 	glBindVertexArray(0);
 }

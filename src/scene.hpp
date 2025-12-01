@@ -42,6 +42,13 @@ public:
 	void setStartPos(const glm::vec3& pos);
 	glm::vec3 getEndPos() const;
 	void setEndPos(const glm::vec3& pos);
+	float getAnimationTime() const;
+	void setAnimationTime(float time);
+	int getIntermediateFrameCount() const;
+	void setIntermediateFrameCount(int count);
+	bool getRenderIntermediateFrames() const;
+	void setRenderIntermediateFrames(bool render);
+	float getTime() const;
 
 private:
 	const glm::ivec2& m_viewportSize{};
@@ -53,14 +60,14 @@ private:
 
 	static constexpr float gridScale = 5.0f;
 	Plane m_plane{gridScale};
-	
+
 	int m_intermediateFrameCount = 5;
 
-	Frame m_eulerFrame;
+	Frame m_eulerFrame{false};
 	std::vector<Frame> m_eulerFrames;
-	Frame m_quaternionLinearFrame;
+	Frame m_quaternionLinearFrame{false};
 	std::vector<Frame> m_quaternionLinearFrames;
-	Frame m_quaternionSlerpFrame;
+	Frame m_quaternionSlerpFrame{false};
 	std::vector<Frame> m_quaternionSlerpFrames;
 
 	Interpolation m_interpolation;

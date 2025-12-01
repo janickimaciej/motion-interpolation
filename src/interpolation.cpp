@@ -1,5 +1,8 @@
 #include "interpolation.hpp"
 
+#include <algorithm>
+#include <cstddef>
+
 Interpolation::Interpolation(Frame& eulerFrame, std::vector<Frame>& eulerFrames,
 	Frame& quaternionLinearFrame, std::vector<Frame>& quaternionLinearFrames,
 	Frame& quaternionSlerpFrame, std::vector<Frame>& quaternionSlerpFrames) :
@@ -51,9 +54,40 @@ void Interpolation::update()
 	updateFrames();
 }
 
+void Interpolation::updateFrames()
+{
+	glm::vec3 currentPos = interpolatePos(m_currentTime);
+	m_eulerFrame.setPos(currentPos);
+	m_quaternionLinearFrame.setPos(currentPos);
+	m_quaternionSlerpFrame.setPos(currentPos);
+
+	std::size_t intermediateFrameCount = m_eulerFrames.size();
+	float dTime = m_endTime / (intermediateFrameCount - 1);
+	for (int i = 0; i < intermediateFrameCount; ++i)
+	{
+		float time = i * dTime;
+		glm::vec3 pos = interpolatePos(time);
+		m_eulerFrames[i].setPos(pos);
+		m_quaternionLinearFrames[i].setPos(pos);
+		m_quaternionSlerpFrames[i].setPos(pos);
+	}
+}
+
 float Interpolation::getTime() const
 {
 	return m_currentTime;
+}
+
+float Interpolation::getEndTime() const
+{
+	return m_endTime;
+}
+
+void Interpolation::setEndTime(float time)
+{
+	m_endTime = time;
+	m_currentTime = std::min(m_currentTime, time);
+	updateFrames();
 }
 
 glm::vec3 Interpolation::getStartPos() const
@@ -78,12 +112,9 @@ void Interpolation::setEndPos(const glm::vec3& pos)
 	updateFrames();
 }
 
-void Interpolation::updateFrames()
+glm::vec3 Interpolation::interpolatePos(float time) const
 {
-	glm::vec3 pos = m_startPos + (m_endPos - m_startPos) * m_currentTime / m_endTime;
-	m_eulerFrame.setPos(pos);
-	m_quaternionLinearFrame.setPos(pos);
-	m_quaternionSlerpFrame.setPos(pos);
+	return m_startPos + (m_endPos - m_startPos) * time / m_endTime;
 }
 
 Interpolation::TimePoint Interpolation::now()

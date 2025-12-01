@@ -20,16 +20,18 @@ Scene::Scene(const glm::ivec2& viewportSize) :
 
 	addPitchCamera(glm::radians(-30.0f));
 	addYawCamera(glm::radians(15.0f));
-	
+
 	m_leftFramebuffer->bind();
 	setUpFramebuffer();
 	m_leftFramebuffer->unbind();
-	
+
 	m_rightFramebuffer->bind();
 	setUpFramebuffer();
 	m_rightFramebuffer->unbind();
-	
+
 	setUpFramebuffer();
+
+	m_interpolation.updateFrames();
 }
 
 void Scene::update()
@@ -45,7 +47,7 @@ void Scene::render()
 	renderFrames(m_interpolationTypeLeft);
 	renderGrid();
 	m_leftFramebuffer->unbind();
-	
+
 	m_rightFramebuffer->bind();
 	clearFramebuffer();
 	m_camera.use();
@@ -157,6 +159,45 @@ glm::vec3 Scene::getEndPos() const
 void Scene::setEndPos(const glm::vec3& pos)
 {
 	m_interpolation.setEndPos(pos);
+}
+
+float Scene::getAnimationTime() const
+{
+	return m_interpolation.getEndTime();
+}
+
+void Scene::setAnimationTime(float time)
+{
+	m_interpolation.setEndTime(time);
+}
+
+int Scene::getIntermediateFrameCount() const
+{
+	return m_intermediateFrameCount;
+}
+
+void Scene::setIntermediateFrameCount(int count)
+{
+	m_intermediateFrameCount = count;
+	m_eulerFrames.resize(count);
+	m_quaternionLinearFrames.resize(count);
+	m_quaternionSlerpFrames.resize(count);
+	m_interpolation.updateFrames();
+}
+
+bool Scene::getRenderIntermediateFrames() const
+{
+	return m_renderIntermediateFrames;
+}
+
+void Scene::setRenderIntermediateFrames(bool render)
+{
+	m_renderIntermediateFrames = render;
+}
+
+float Scene::getTime() const
+{
+	return m_interpolation.getTime();
 }
 
 void Scene::setUpFramebuffer() const

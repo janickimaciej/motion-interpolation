@@ -3,10 +3,11 @@
 class FrameMesh
 {
 public:
-	FrameMesh();
+	FrameMesh(bool intermediate);
 	~FrameMesh();
 	void render() const;
 
 private:
 	unsigned int m_VAO{};
+	bool m_intermediate{};
 };

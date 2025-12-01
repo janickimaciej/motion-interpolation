@@ -7,10 +7,12 @@
 
 #include <glm/glm.hpp>
 
+#include <memory>
+
 class Frame
 {
 public:
-	Frame();
+	Frame(bool intermediate = true);
 
 	void render() const;
 
@@ -18,9 +20,11 @@ public:
 	void setPos(const glm::vec3& pos);
 
 private:
+	static std::unique_ptr<FrameMesh> m_mainFrameMesh;
+	static std::unique_ptr<FrameMesh> m_intermediateFrameMesh;
 	const ShaderProgram& m_shaderProgram = *ShaderPrograms::frame;
 	glm::vec3 m_pos{0, 0, 0};
-	FrameMesh m_mesh{};
+	bool m_intermediate{};
 
 	void updateShaders() const;
 };

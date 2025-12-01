@@ -18,8 +18,11 @@ public:
 	void stop();
 	void reset();
 	void update();
+	void updateFrames();
 	float getTime() const;
 
+	float getEndTime() const;
+	void setEndTime(float time);
 	glm::vec3 getStartPos() const;
 	void setStartPos(const glm::vec3& pos);
 	glm::vec3 getEndPos() const;
@@ -37,10 +40,10 @@ private:
 	float m_currentTime = 0;
 	float m_endTime = 5;
 	bool m_running = false;
-	
+
 	glm::vec3 m_startPos{0, 0, 0};
 	glm::vec3 m_endPos{1, 1, 1};
 
-	void updateFrames();
+	glm::vec3 interpolatePos(float time) const;
 	static TimePoint now();
 };

@@ -26,7 +26,7 @@ Window::Window(const glm::ivec2& initialSize) :
 	glfwSetScrollCallback(m_windowPtr, callbackWrapper<&Window::scrollCallback>);
 
 	gladLoadGLLoader(reinterpret_cast<GLADloadproc>(glfwGetProcAddress));
-	
+
 	updateViewport();
 	ShaderPrograms::init();
 }
