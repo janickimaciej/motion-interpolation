@@ -1,0 +1,77 @@
+#pragma once
+
+#include "cameras/perspectiveCamera.hpp"
+#include "framebuffer.hpp"
+#include "frame.hpp"
+#include "interpolation.hpp"
+#include "interpolationType.hpp"
+#include "plane/plane.hpp"
+#include "quad.hpp"
+
+#include <glm/glm.hpp>
+
+#include <memory>
+#include <vector>
+
+class Scene
+{
+public:
+	Scene(const glm::ivec2& windowSize);
+	void update();
+	void render();
+	void updateViewportSize();
+
+	void addPitchCamera(float pitchRad);
+	void addYawCamera(float yawRad);
+	void moveXCamera(float x);
+	void moveYCamera(float y);
+	void zoomCamera(float zoom);
+
+	void updateCameraGUI();
+
+	void startInterpolation();
+	void stopInterpolation();
+	void resetInterpolation();
+
+	InterpolationType getInterpolationTypeLeft() const;
+	void setInterpolationTypeLeft(InterpolationType type);
+	InterpolationType getInterpolationTypeRight() const;
+	void setInterpolationTypeRight(InterpolationType type);
+
+	glm::vec3 getStartPos() const;
+	void setStartPos(const glm::vec3& pos);
+	glm::vec3 getEndPos() const;
+	void setEndPos(const glm::vec3& pos);
+
+private:
+	const glm::ivec2& m_viewportSize{};
+	PerspectiveCamera m_camera;
+
+	std::unique_ptr<Framebuffer> m_leftFramebuffer;
+	std::unique_ptr<Framebuffer> m_rightFramebuffer;
+	Quad m_quad{};
+
+	static constexpr float gridScale = 5.0f;
+	Plane m_plane{gridScale};
+	
+	int m_intermediateFrameCount = 5;
+
+	Frame m_eulerFrame;
+	std::vector<Frame> m_eulerFrames;
+	Frame m_quaternionLinearFrame;
+	std::vector<Frame> m_quaternionLinearFrames;
+	Frame m_quaternionSlerpFrame;
+	std::vector<Frame> m_quaternionSlerpFrames;
+
+	Interpolation m_interpolation;
+	InterpolationType m_interpolationTypeLeft = InterpolationType::euler;
+	InterpolationType m_interpolationTypeRight = InterpolationType::quaternionSlerp;
+	bool m_renderIntermediateFrames = false;
+
+	void setUpFramebuffer() const;
+	void clearFramebuffer() const;
+
+	void renderGrid() const;
+	void renderFrames(InterpolationType type);
+	void renderFrames(const Frame& mainFrame, const std::vector<Frame>& intermediateFrames) const;
+};
