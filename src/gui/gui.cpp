@@ -4,8 +4,8 @@
 #include <imgui/backends/imgui_impl_glfw.h>
 #include <imgui/backends/imgui_impl_opengl3.h>
 
-GUI::GUI(GLFWwindow* window, Scene& scene, const glm::ivec2& windowSize) :
-	m_leftPanel{scene, windowSize}
+GUI::GUI(GLFWwindow* window, Scene& scene, const glm::ivec2& viewportSize) :
+	m_leftPanel{scene, viewportSize}
 {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
