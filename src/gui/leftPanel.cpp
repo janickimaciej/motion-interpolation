@@ -1,4 +1,4 @@
-#include "guis/leftPanel.hpp"
+#include "gui/leftPanel.hpp"
 
 #include "interpolationType.hpp"
 

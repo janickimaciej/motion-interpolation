@@ -1,6 +1,6 @@
-#include "guis/perspectiveCameraGUI.hpp"
+#include "gui/perspectiveCameraGUI.hpp"
 
-#include "cameras/perspectiveCamera.hpp"
+#include "camera/perspectiveCamera.hpp"
 
 #include <imgui/imgui.h>
 

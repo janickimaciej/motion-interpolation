@@ -1,5 +1,7 @@
 #include "plane/plane.hpp"
 
+#include "shaderPrograms.hpp"
+
 Plane::Plane(float scale) :
 	m_scale{scale}
 { }
@@ -12,6 +14,6 @@ void Plane::render() const
 
 void Plane::updateShaders() const
 {
-	m_shaderProgram.use();
-	m_shaderProgram.setUniform("scale", m_scale);
+	ShaderPrograms::plane->use();
+	ShaderPrograms::plane->setUniform("scale", m_scale);
 }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "guis/leftPanel.hpp"
+#include "gui/leftPanel.hpp"
 #include "scene.hpp"
 
 #include <glad/glad.h>
@@ -18,6 +18,4 @@ public:
 
 private:
 	LeftPanel m_leftPanel;
-
-	Scene& m_scene;
 };

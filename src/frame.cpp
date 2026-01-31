@@ -1,5 +1,7 @@
 #include "frame.hpp"
 
+#include "shaderPrograms.hpp"
+
 Frame::Frame(bool intermediate) :
 	m_intermediate{intermediate}
 {
@@ -94,8 +96,8 @@ std::unique_ptr<FrameMesh> Frame::m_intermediateFrameMesh = nullptr;
 
 void Frame::updateShaders() const
 {
-	m_shaderProgram.use();
-	m_shaderProgram.setUniform("modelMatrix", m_modelMatrix);
+	ShaderPrograms::frame->use();
+	ShaderPrograms::frame->setUniform("modelMatrix", m_modelMatrix);
 }
 
 void Frame::updateModelMatrix()

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "guis/perspectiveCameraGUI.hpp"
-#include "cameras/camera.hpp"
+#include "gui/perspectiveCameraGUI.hpp"
+#include "camera/camera.hpp"
 
 class PerspectiveCamera : public Camera
 {

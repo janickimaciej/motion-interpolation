@@ -1,4 +1,4 @@
-#include "cameras/perspectiveCamera.hpp"
+#include "camera/perspectiveCamera.hpp"
 
 #include <cmath>
 
