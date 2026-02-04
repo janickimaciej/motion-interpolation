@@ -25,11 +25,6 @@ void Frame::render() const
 	}
 }
 
-glm::vec3 Frame::getPos() const
-{
-	return m_pos;
-}
-
 void Frame::setPos(const glm::vec3& pos)
 {
 	m_pos = pos;

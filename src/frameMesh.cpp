@@ -16,7 +16,7 @@ FrameMesh::~FrameMesh()
 void FrameMesh::render() const
 {
 	glBindVertexArray(m_VAO);
-	glLineWidth(m_intermediate ? 1 : 5);
+	glLineWidth(m_intermediate ? 1.0f : 5.0f);
 	glDrawArrays(GL_POINTS, 0, 1);
 	glBindVertexArray(0);
 }

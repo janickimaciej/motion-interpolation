@@ -24,7 +24,7 @@ void Interpolation::start()
 		return;
 	}
 
-	m_startTime = now() - std::chrono::duration<float>(m_currentTime);
+	m_startTime = now() - std::chrono::duration<float>(m_currTime);
 	m_running = true;
 }
 
@@ -36,7 +36,7 @@ void Interpolation::stop()
 void Interpolation::reset()
 {
 	stop();
-	m_currentTime = 0;
+	m_currTime = 0;
 	updateFrames();
 }
 
@@ -47,11 +47,11 @@ void Interpolation::update()
 		return;
 	}
 
-	m_currentTime =
+	m_currTime =
 		std::chrono::duration_cast<std::chrono::duration<float>>(now() - m_startTime).count();
-	if (m_currentTime >= m_endTime)
+	if (m_currTime >= m_endTime)
 	{
-		m_currentTime = m_endTime;
+		m_currTime = m_endTime;
 		m_running = false;
 	}
 	updateFrames();
@@ -59,14 +59,14 @@ void Interpolation::update()
 
 void Interpolation::updateFrames()
 {
-	m_eulerFrame.setPos(interpolatePos(m_currentTime));
-	m_eulerFrame.setEulerAngles(interpolateEulerAngles(m_currentTime));
+	m_eulerFrame.setPos(interpolatePos(m_currTime));
+	m_eulerFrame.setEulerAngles(interpolateEulerAngles(m_currTime));
 
-	m_quatLinearFrame.setPos(interpolatePos(m_currentTime));
-	m_quatLinearFrame.setQuat(interpolateQuatLinear(m_currentTime));
+	m_quatLinearFrame.setPos(interpolatePos(m_currTime));
+	m_quatLinearFrame.setQuat(interpolateQuatLinear(m_currTime));
 
-	m_quatSlerpFrame.setPos(interpolatePos(m_currentTime));
-	m_quatSlerpFrame.setQuat(interpolateQuatSlerp(m_currentTime));
+	m_quatSlerpFrame.setPos(interpolatePos(m_currTime));
+	m_quatSlerpFrame.setQuat(interpolateQuatSlerp(m_currTime));
 
 	std::size_t intermediateFrameCount = m_eulerFrames.size();
 	float dTime = m_endTime / (intermediateFrameCount - 1);
@@ -87,7 +87,7 @@ void Interpolation::updateFrames()
 
 float Interpolation::getTime() const
 {
-	return m_currentTime;
+	return m_currTime;
 }
 
 float Interpolation::getEndTime() const
@@ -98,7 +98,7 @@ float Interpolation::getEndTime() const
 void Interpolation::setEndTime(float time)
 {
 	m_endTime = time;
-	m_currentTime = std::min(m_currentTime, time);
+	m_currTime = std::min(m_currTime, time);
 	updateFrames();
 }
 

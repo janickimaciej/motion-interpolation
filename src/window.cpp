@@ -79,9 +79,9 @@ void Window::resizeCallback(int width, int height)
 
 void Window::cursorMovementCallback(double x, double y)
 {
-	glm::vec2 currentPos{static_cast<float>(x), static_cast<float>(y)};
-	glm::vec2 offset = currentPos - m_lastCursorPos;
-	m_lastCursorPos = currentPos;
+	glm::vec2 currPos{static_cast<float>(x), static_cast<float>(y)};
+	glm::vec2 offset = currPos - m_lastCursorPos;
+	m_lastCursorPos = currPos;
 
 	if ((!isKeyPressed(GLFW_KEY_LEFT_SHIFT) &&
 		isButtonPressed(GLFW_MOUSE_BUTTON_MIDDLE))

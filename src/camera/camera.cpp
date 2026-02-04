@@ -6,7 +6,8 @@
 
 #include <cmath>
 
-Camera::Camera(float nearPlane, float farPlane) :
+Camera::Camera(const glm::ivec2& viewportSize, float nearPlane, float farPlane) :
+	m_viewportSize{viewportSize},
 	m_nearPlane{nearPlane},
 	m_farPlane{farPlane}
 {
@@ -29,15 +30,18 @@ void Camera::setViewportSize(const glm::ivec2& viewportSize)
 	updateProjectionMatrix();
 }
 
-glm::vec3 Camera::getPos() const
+void Camera::moveX(float x)
 {
-	return m_targetPos + m_radius *
-		glm::vec3
-		{
-			-std::cos(m_pitchRad) * std::sin(m_yawRad),
-			-std::sin(m_pitchRad),
-			std::cos(m_pitchRad) * std::cos(m_yawRad)
-		};
+	m_targetPos += m_radius * glm::mat3{m_viewMatrixInverse} * glm::vec3{x, 0, 0};
+
+	updateViewMatrix();
+}
+
+void Camera::moveY(float y)
+{
+	m_targetPos += m_radius * glm::mat3{m_viewMatrixInverse} * glm::vec3{0, y, 0};
+
+	updateViewMatrix();
 }
 
 void Camera::addPitch(float pitchRad)
@@ -74,36 +78,9 @@ void Camera::addYaw(float yawRad)
 	updateViewMatrix();
 }
 
-void Camera::setTargetPos(const glm::vec3& pos)
-{
-	m_targetPos = pos;
-
-	updateViewMatrix();
-}
-
-void Camera::moveX(float x)
-{
-	m_targetPos += m_radius * glm::mat3{m_viewMatrixInverse} * glm::vec3{x, 0, 0};
-
-	updateViewMatrix();
-}
-
-void Camera::moveY(float y)
-{
-	m_targetPos += m_radius * glm::mat3{m_viewMatrixInverse} * glm::vec3{0, y, 0};
-
-	updateViewMatrix();
-}
-
 void Camera::updateViewMatrix()
 {
-	glm::vec3 pos = m_targetPos + m_radius *
-		glm::vec3
-		{
-			-std::cos(m_pitchRad) * std::sin(m_yawRad),
-			-std::sin(m_pitchRad),
-			std::cos(m_pitchRad) * std::cos(m_yawRad)
-		};
+	glm::vec3 pos = getPos();
 
 	glm::vec3 direction = glm::normalize(pos - m_targetPos);
 	glm::vec3 right = glm::normalize(glm::cross(glm::vec3{0, 1, 0}, direction));
@@ -116,6 +93,22 @@ void Camera::updateViewMatrix()
 		direction.x, direction.y, direction.z, 0,
 		pos.x, pos.y, pos.z, 1
 	};
+}
+
+float Camera::getAspectRatio() const
+{
+	return static_cast<float>(m_viewportSize.x) / m_viewportSize.y;
+}
+
+glm::vec3 Camera::getPos() const
+{
+	return m_targetPos + m_radius *
+		glm::vec3
+		{
+			-std::cos(m_pitchRad) * std::sin(m_yawRad),
+			-std::sin(m_pitchRad),
+			std::cos(m_pitchRad) * std::cos(m_yawRad)
+		};
 }
 
 void Camera::updateShaders() const

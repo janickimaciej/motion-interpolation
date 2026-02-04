@@ -14,7 +14,6 @@ public:
 
 	void render() const;
 
-	glm::vec3 getPos() const;
 	void setPos(const glm::vec3& pos);
 	void setEulerAngles(const glm::vec3& angles);
 	void setQuat(const glm::vec4& quat);

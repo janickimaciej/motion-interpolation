@@ -2,14 +2,15 @@
 
 #include "shaderPrograms.hpp"
 
-static constexpr float viewHeight = 10.0f;
-static constexpr float fovYDeg = 60.0f;
+#include <glad/glad.h>
+
 static constexpr float nearPlane = 0.1f;
 static constexpr float farPlane = 1000.0f;
+static constexpr float fovYDeg = 60.0f;
 
 Scene::Scene(const glm::ivec2& viewportSize) :
 	m_viewportSize{viewportSize},
-	m_camera{fovYDeg, nearPlane, farPlane},
+	m_camera{glm::ivec2{m_viewportSize.x / 2, m_viewportSize.y}, nearPlane, farPlane, fovYDeg},
 	m_eulerFrames(m_intermediateFrameCount),
 	m_quatLinearFrames(m_intermediateFrameCount),
 	m_quatSlerpFrames(m_intermediateFrameCount),
