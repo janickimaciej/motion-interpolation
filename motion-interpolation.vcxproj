@@ -198,6 +198,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)"src\ "$(TargetDir)"src\ /E/Y</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy "$(SolutionDir)src\" "$(TargetDir)src\" /E/Y</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -224,6 +227,9 @@
     <PostBuildEvent>
       <Command>xcopy "$(SolutionDir)"src\ "$(TargetDir)"src\ /E/Y</Command>
     </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>xcopy "$(SolutionDir)src\" "$(TargetDir)src\" /E/Y</Command>
+    </CustomBuildStep>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
