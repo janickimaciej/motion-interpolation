@@ -196,11 +196,8 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)"src\ "$(TargetDir)"src\ /E/Y</Command>
-    </PostBuildEvent>
-    <CustomBuildStep>
       <Command>xcopy "$(SolutionDir)src\" "$(TargetDir)src\" /E/Y</Command>
-    </CustomBuildStep>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -225,11 +222,8 @@
       <AdditionalDependencies>glfw3.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>xcopy "$(SolutionDir)"src\ "$(TargetDir)"src\ /E/Y</Command>
-    </PostBuildEvent>
-    <CustomBuildStep>
       <Command>xcopy "$(SolutionDir)src\" "$(TargetDir)src\" /E/Y</Command>
-    </CustomBuildStep>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
