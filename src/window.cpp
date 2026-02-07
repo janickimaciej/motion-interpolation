@@ -1,6 +1,5 @@
 #include "window.hpp"
 
-#include "gui/leftPanel.hpp"
 #include "shaderPrograms.hpp"
 
 #include <cmath>

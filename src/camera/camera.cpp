@@ -19,11 +19,6 @@ void Camera::use() const
 	updateShaders();
 }
 
-glm::mat4 Camera::getMatrix() const
-{
-	return m_projectionMatrix * glm::inverse(m_viewMatrixInverse);
-}
-
 void Camera::setViewportSize(const glm::ivec2& viewportSize)
 {
 	m_viewportSize = viewportSize;

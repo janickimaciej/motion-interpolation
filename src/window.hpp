@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gui/gui.hpp"
+#include "gui/leftPanel.hpp"
 #include "scene.hpp"
 
 #include <glad/glad.h>

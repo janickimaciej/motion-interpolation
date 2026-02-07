@@ -10,7 +10,6 @@ public:
 
 	void use() const;
 	virtual void updateGUI() = 0;
-	glm::mat4 getMatrix() const;
 	void setViewportSize(const glm::ivec2& viewportSize);
 
 	void moveX(float x);
